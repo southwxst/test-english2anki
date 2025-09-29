@@ -1,0 +1,21 @@
+
+{
+  "name": "Test-English → Anki",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Save grammar questions to Anki from test-english.com",
+  "permissions": ["scripting", "storage"],
+  "host_permissions": ["https://test-english.com/grammar-points/*", "http://127.0.0.1/*"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://test-english.com/grammar-points/*"],
+      "js": ["popup.js"]
+    }
+  ]
+}

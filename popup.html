@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anki Export</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+    }
+    select, button {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+    #status {
+      margin-top: 15px;
+      padding: 5px;
+      border-radius: 3px;
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+  <h3>Anki Settings</h3>
+  <label>Deck: <select id="deckSelect"></select></label>
+  <label>Note Type: <select id="modelSelect"></select></label>
+  <label>Front Field: <select id="frontField"></select></label>
+  <label>Back Field: <select id="backField"></select></label>
+  <button id="addCard">Add Card</button>
+  <div id="status">⏳ Loading...</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

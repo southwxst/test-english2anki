@@ -226,55 +226,65 @@ document.getElementById("addCard").addEventListener("click", async () => {
 function collectQuestions() {
   const questions = document.querySelectorAll(".show-question-content");
   const result = [];
+  let feedbackEl = "";
 
-  questions.forEach((question) => {
-    const answer = question.parentElement.querySelector(
-      ".show-question-choices",
-    );
 
-    // Correct 判定
-    const hasCorrectImg = question.querySelector('img[alt="Correct"]');
-    const hasCorrectAnswer = answer?.querySelector(
-      "li.user-answer.correct-answer",
-    );
-    const answers = answer?.querySelectorAll("span.answer");
-    // li の class が user-answer correct-answer だから ul じゃなくて li を指定した方が確実
+questions.forEach((question) => {
+  const answer = question.parentElement.querySelector(".show-question-choices");
 
-    if (hasCorrectImg || hasCorrectAnswer) {
-      return;
+  // Correct 判定
+  const hasCorrectImg = question.querySelector('img[alt="Correct"]');
+  const hasCorrectAnswer = answer?.querySelector("li.user-answer.correct-answer");
+  const answers = answer?.querySelectorAll("span.answer");
+
+  if (hasCorrectImg || hasCorrectAnswer) {
+    return;
+  }
+
+  let qText = "";
+  const correctAnswers = [];
+
+  question.childNodes.forEach((node) => {
+    if (node.className === "user-answer wrong-gap-answer") {
+      qText += `"${node.textContent.trim()}" `;
+    } else if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      node.tagName === "SPAN"
+    ) {
+      qText += node.textContent.trim() + " ";
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      const t = node.textContent.trim();
+      if (t) qText += t + " ";
     }
+  });
 
-    let qText = "";
-    question.childNodes.forEach((node) => {
-      if (node.className === "user-answer wrong-gap-answer") {
-        qText += `"${node.textContent.trim()}" `;
-      } else if (
-        node.nodeType === Node.ELEMENT_NODE &&
-        node.tagName === "SPAN"
-      ) {
-        qText += node.textContent.trim() + " ";
-      } else if (node.nodeType === Node.TEXT_NODE) {
-        const t = node.textContent.trim();
-        if (t) qText += t + " ";
+  if (answers && answers.length > 0) {
+    answers.forEach((ans) => {
+      if (ans.parentElement.classList.contains("correct-answer")) {
+        correctAnswers.push(ans.textContent.trim());
+	              qText += `<br>"${ans.textContent.trim()}" `;
+      } else {
+        qText += `<br>"${ans.textContent.trim()}" `;
       }
     });
-    if (answers && answers.length > 0) {
-      answers.forEach((ans) => {
-        qText += `<br>"${ans.textContent.trim()}" `;
-      });
-    }
-    let feedbackEl =
-      question.parentElement.querySelector(
-        ".watupro-main-feedback.feedback-incorrect",
-      ) || question.parentElement.querySelector(".watupro-main-feedback");
+  }
 
-    let feedbackText = feedbackEl ? feedbackEl.innerText.trim() : "";
+  // ページのフィードバック要素を探す
+  const feedbackNode =
+    question.parentElement.querySelector(".watupro-main-feedback.feedback-incorrect") ||
+    question.parentElement.querySelector(".watupro-main-feedback");
+  let feedbackText = feedbackNode ? feedbackNode.innerText.trim() : "";
 
-    result.push({
-      question: `Q: ${qText.trim()}`,
-      feedback: `Feedback: ${feedbackText}`,
-    });
+  // 正解を feedback に追加
+  if (correctAnswers.length > 0) {
+    feedbackText += `<br><br>Correct: ${correctAnswers.join("<br>")}`;
+  }
+
+  result.push({
+    question: `Q: ${qText.trim()}`,
+    feedback: `Feedback: ${feedbackText}`,
   });
+});
 
   return result;
 }

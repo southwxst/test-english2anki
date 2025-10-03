@@ -234,10 +234,11 @@ questions.forEach((question) => {
 
   // Correct 判定
   const hasCorrectImg = question.querySelector('img[alt="Correct"]');
+  const hasWrongImg = question.querySelector('img[alt="Wrong"]');
   const hasCorrectAnswer = answer?.querySelector("li.user-answer.correct-answer");
   const answers = answer?.querySelectorAll("span.answer");
 
-  if (hasCorrectImg || hasCorrectAnswer) {
+  if (!hasWrongImg) {
     return;
   }
 

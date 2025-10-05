@@ -233,14 +233,15 @@ questions.forEach((question) => {
   const answer = question.parentElement.querySelector(".show-question-choices");
 
   // Correct 判定
-  const hasCorrectImg = question.querySelector('img[alt="Correct"]');
   const hasWrongImg = question.querySelector('img[alt="Wrong"]');
-  const hasCorrectAnswer = answer?.querySelector("li.user-answer.correct-answer");
   const answers = answer?.querySelectorAll("span.answer");
 
-  if (!hasWrongImg) {
-    return;
-  }
+    const correctAnswersFound = answer?.querySelectorAll("li.user-answer.correct-answer") || [];
+
+    // correct-answer が1つ以上あればスキップ
+    if (correctAnswersFound.length > 0) {
+      return;
+    }
 
   let qText = "";
   const correctAnswers = [];
